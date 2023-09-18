@@ -1,7 +1,7 @@
-package m22t.ansdlsrb.m22tProject.service;
+package m22t.ansdlsrb.m22tProject.service.place;
 
 import m22t.ansdlsrb.m22tProject.data.dao.PlaceDao;
-import m22t.ansdlsrb.m22tProject.data.dto.FrontendDto;
+import m22t.ansdlsrb.m22tProject.data.dto.PlaceLocationInputDto;
 import m22t.ansdlsrb.m22tProject.data.dto.PlaceDto;
 import m22t.ansdlsrb.m22tProject.data.entity.PlaceEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,14 +19,14 @@ public class PlaceServiceImpl implements PlaceService{
         this.placeDao = placeDao;
     }
     @Override
-    public List<PlaceDto> getPlacesByCoordinates(FrontendDto frontendDto) {
+    public List<PlaceDto> getPlacesByCoordinates(PlaceLocationInputDto placeLocationInputDto) {
 
-        double minX = frontendDto.getX() - 0.005;
-        double maxX = frontendDto.getX() + 0.005;
-        double minY = frontendDto.getY() - 0.005;
-        double maxY = frontendDto.getY() + 0.005;
+        double minX = placeLocationInputDto.getX() - 0.005;
+        double maxX = placeLocationInputDto.getX() + 0.005;
+        double minY = placeLocationInputDto.getY() - 0.005;
+        double maxY = placeLocationInputDto.getY() + 0.005;
 
-        List<PlaceEntity> places = placeDao.getPlacesByCoordinates(minX, maxX, minY, maxY, frontendDto.getType());
+        List<PlaceEntity> places = placeDao.getPlacesByCoordinates(minX, maxX, minY, maxY, placeLocationInputDto.getType());
 
         List<PlaceDto> placeDtos = new ArrayList<>();
         for (PlaceEntity placeEntity : places) {
