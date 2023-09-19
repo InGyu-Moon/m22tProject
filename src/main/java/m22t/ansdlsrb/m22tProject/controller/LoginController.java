@@ -1,5 +1,7 @@
 package m22t.ansdlsrb.m22tProject.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import m22t.ansdlsrb.m22tProject.data.dto.LoginInputDto;
 import m22t.ansdlsrb.m22tProject.data.dto.MemberDto;
@@ -20,14 +22,14 @@ public class LoginController {
 
     @GetMapping("/login")
     public String loginForm(@ModelAttribute LoginInputDto loginInputDto){
-        return "login/loginForm";
+        return "login/loginFormV2";
     }
 
     @PostMapping("/login")
-    public String login(@Validated @ModelAttribute LoginInputDto loginInputDto, BindingResult result ){
+    public String login(@Validated @ModelAttribute LoginInputDto loginInputDto, BindingResult result, HttpServletRequest request){
 
         if(result.hasErrors()){
-            return "login/loginForm";
+            return "login/loginFormV2";
         }
 
         MemberDto loginMember = loginService.login(loginInputDto.getMemberEmail(), loginInputDto.getPassword());
@@ -38,14 +40,27 @@ public class LoginController {
             // 특정 필드 수준의 오류 -> rejectValue
             //result.rejectValue("", "loginFail", "아이디 또는 비밀번호가 일치하지 않습니다.");
             result.reject("loginFail", "아이디 또는 비밀번호가 일치하지 않습니다.");
-            return "login/loginForm";
+            return "login/loginFormV2";
         }
 
-        //로그인 성공
-
+        //로그인 성공 로직
+        // default : true -> 세션이 있으면 있는 세션 반환, 없으면 신규 세션 생성
+        // false -> 세션이 없으면 null 반환
+        HttpSession session = request.getSession(true);
+        session.setAttribute("memberEmail",loginMember.getMemberEmail());
+        session.setAttribute("nickname",loginMember.getNickname());
 
         return "redirect:/";
 
+    }
+
+    @PostMapping("logout")
+    public String logout(HttpServletRequest request){
+        HttpSession session = request.getSession(false);
+        if(session != null){
+            session.invalidate();
+        }
+        return "redirect:/";
     }
 
 }

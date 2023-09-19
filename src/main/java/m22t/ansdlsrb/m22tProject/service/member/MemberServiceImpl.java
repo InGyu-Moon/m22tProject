@@ -1,15 +1,18 @@
 package m22t.ansdlsrb.m22tProject.service.member;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import m22t.ansdlsrb.m22tProject.data.dto.MemberInputDto;
 import m22t.ansdlsrb.m22tProject.data.entity.MemberEntity;
 import m22t.ansdlsrb.m22tProject.data.repository.MemberRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
     public void saveMember(MemberInputDto userInputDto) {
@@ -17,7 +20,7 @@ public class MemberServiceImpl implements MemberService {
         MemberEntity memberEntity = new MemberEntity();
 
         memberEntity.setMemberEmail(userInputDto.getMemberEmail());
-        memberEntity.setPassword(userInputDto.getPassword());
+        memberEntity.setPassword(bCryptPasswordEncoder.encode(userInputDto.getPassword()));
         memberEntity.setNickname(userInputDto.getNickname());
 
         memberRepository.save(memberEntity);

@@ -40,6 +40,13 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
+	// 1. 스프링 시큐리티 사용하기 위한 스타터 추가
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	// 2. 타임리프에서 스프링 시큐리티를 사용하기 위한 의존성 추가
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
+	// 3. 스프링 시큐리티를 테스트 하기 위한 의존성 추가
+	implementation 'org.springframework.security:spring-security-test'
+
 
 }
 
