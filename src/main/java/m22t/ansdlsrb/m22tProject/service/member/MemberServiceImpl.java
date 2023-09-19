@@ -1,4 +1,4 @@
-package m22t.ansdlsrb.m22tProject.service.user;
+package m22t.ansdlsrb.m22tProject.service.member;
 
 import lombok.RequiredArgsConstructor;
 import m22t.ansdlsrb.m22tProject.data.dto.MemberInputDto;
@@ -12,7 +12,7 @@ public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
 
     @Override
-    public void saveUser(MemberInputDto userInputDto) {
+    public void saveMember(MemberInputDto userInputDto) {
 
         MemberEntity memberEntity = new MemberEntity();
 
@@ -25,12 +25,16 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     // userEmail 중복 검사
-    public boolean isEmailUnique(String userEmail) {
-        return memberRepository.findByUserEmail(userEmail) == null;
+    public boolean isEmailUnique(String memberEmail) {
+        return memberRepository.findByMemberEmail(memberEmail)
+                .isEmpty();
+        //return memberRepository.findByMemberEmail(memberEmail) == null;
     }
     @Override
     // nickname 중복 검사
     public boolean isNicknameUnique(String nickname) {
-        return memberRepository.findByNickname(nickname) == null;
+        return memberRepository.findByNickname(nickname)
+                .isEmpty();
+        //return memberRepository.findByNickname(nickname) == null;
     }
 }

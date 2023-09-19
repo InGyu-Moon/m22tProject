@@ -1,9 +1,9 @@
-package m22t.ansdlsrb.m22tProject.service.user;
+package m22t.ansdlsrb.m22tProject.service.member;
 
 import m22t.ansdlsrb.m22tProject.data.dto.MemberInputDto;
 
 public interface MemberService {
-    public void saveUser(MemberInputDto userInputDto);
+    public void saveMember(MemberInputDto userInputDto);
     // userEmail 중복 검사
     public boolean isEmailUnique(String userEmail);
 
