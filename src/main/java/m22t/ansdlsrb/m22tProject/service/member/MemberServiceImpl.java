@@ -16,7 +16,7 @@ public class MemberServiceImpl implements MemberService {
 
         MemberEntity memberEntity = new MemberEntity();
 
-        memberEntity.setUserEmail(userInputDto.getMemberEmail());
+        memberEntity.setMemberEmail(userInputDto.getMemberEmail());
         memberEntity.setPassword(userInputDto.getPassword());
         memberEntity.setNickname(userInputDto.getNickname());
 

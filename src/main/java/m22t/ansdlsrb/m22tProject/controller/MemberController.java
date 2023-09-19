@@ -3,7 +3,7 @@ package m22t.ansdlsrb.m22tProject.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import m22t.ansdlsrb.m22tProject.data.dto.MemberInputDto;
-import m22t.ansdlsrb.m22tProject.service.user.MemberService;
+import m22t.ansdlsrb.m22tProject.service.member.MemberService;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -45,7 +45,7 @@ public class MemberController {
         }
 
         // 성공 로직 (회원가입 성공)
-        memberService.saveUser(memberInputDto);
+        memberService.saveMember(memberInputDto);
         return "redirect:/";
     }
 
