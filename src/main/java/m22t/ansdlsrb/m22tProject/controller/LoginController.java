@@ -19,7 +19,7 @@ public class LoginController {
 
     @GetMapping("/login")
     public String loginForm(@ModelAttribute LoginInputDto loginInputDto){
-        return "login/loginFormV2";
+        return "login/loginForm";
     }
 
     @PostMapping("/login")
@@ -29,7 +29,7 @@ public class LoginController {
                         HttpServletRequest request){
 
         if(result.hasErrors()){
-            return "login/loginFormV2";
+            return "login/loginForm";
         }
 
         //로그인 확인
@@ -41,7 +41,7 @@ public class LoginController {
             // 특정 필드 수준의 오류 -> rejectValue
             //result.rejectValue("", "loginFail", "아이디 또는 비밀번호가 일치하지 않습니다.");
             result.reject("loginFail", "아이디 또는 비밀번호가 일치하지 않습니다.");
-            return "login/loginFormV2";
+            return "login/loginForm";
         }
 
         //로그인 성공 로직

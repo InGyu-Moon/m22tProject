@@ -21,7 +21,7 @@
     </ul>
 
     <div class="col-md-3 text-end">
-      <a href="/members/new" class="btn btn-primary me-2">Sign-up</a>
+      <a href="/members/new" class="btn btn-outline-primary me-2">Sign-up</a>
       <a th:if="${session.nickname == null}" href="/login" class="btn btn-outline-primary me-2">Login</a>
       <a th:if="${session.nickname != null}" href="/logout" class="btn btn-outline-primary me-2">Logout</a>
     </div>
