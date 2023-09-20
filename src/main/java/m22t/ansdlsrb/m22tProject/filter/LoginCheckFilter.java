@@ -11,6 +11,7 @@ import java.io.IOException;
 @Slf4j
 public class LoginCheckFilter implements Filter {
 
+    //접근 가능한 주소 설정
     private static final String[] whitelist = {"/", "/members/new", "/login", "/logout"};
 
     @Override
@@ -24,7 +25,8 @@ public class LoginCheckFilter implements Filter {
                 HttpSession session = httpRequest.getSession(false);
                 if(session == null || session.getAttribute("memberId") == null){
                     //미인증 사용자
-                    httpResponse.sendRedirect("/login?redirectURL=" + requestURI);
+                    //httpResponse.sendRedirect("/login?redirectURL=" + requestURI);
+                    httpResponse.sendRedirect("/login");
                     return;
                 }
             }
