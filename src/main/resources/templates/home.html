@@ -2,21 +2,23 @@
 <html lang="en">
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>M22T UP</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>M22T UP</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
 </head>
+
 <body>
-<h1>M22T UP</h1>
-<h2 th:if="${session.nickname != null}" th:text="${helloNickname}"></h2>
 
-<a href="/members/new" class="btn btn-primary">회원가입</a>
-<a th:if="${session.nickname == null}" href="/login" class="btn btn-primary">로그인</a>
-<a th:if="${session.nickname != null}" href="/logout" class="btn btn-primary">로그아웃</a>
-<a th:href="@{'/mypage/' + ${session.nickname}}" class="btn btn-primary">마이페이지</a>
+<!-- header -->
+<div th:replace="~{template/fragment/fragment :: header}"></div>
+<!-- header -->
 
-<h3>지도에 마크를 찍고 좌표를 입력하세요!!!</h3>
-<form id="searchForm">
+<div class="text-center">
+  <h1 >M22T UP</h1>
+  <h2 th:if="${session.nickname != null}" th:text="${helloNickname}"></h2>
+  <h3>지도에 마크를 찍고 좌표를 입력하세요!!!</h3>
+  <form id="searchForm">
     <label for="type">Type:</label>
     <input type="radio" id="type0" name="type" value="0" required>
     <label for="type0">전체</label>
@@ -35,10 +37,11 @@
     <input type="number" id="x" name="x" step="any" value="127.2582" required><br><br>
 
     <input type="submit" value="Submit">
-</form>
-<div id="map" style="width:500px;height:400px;"></div>
-<div id="results">
-    <!-- 검색 결과가 여기에 표시될 예정 -->
+  </form>
+  <div id="map-container" style="display: flex; justify-content: center; align-items: center; width: 100%;">
+    <div id="map" style="width:500px;height:400px;"></div>
+    <div id="results"><!-- 검색 결과가 여기에 표시될 예정 --></div>
+  </div>
 </div>
 <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=d7be0dab6870b8fb60794854999fc401"></script>
 <script>
@@ -194,5 +197,11 @@
     });
 
     </script>
+
+<!-- footer -->
+<div th:replace="~{template/fragment/fragment :: footer}"></div>
+<!-- footer -->
+
+
 </body>
 </html>

@@ -14,7 +14,7 @@ public class HomeController {
     public String home(HttpServletRequest request, Model model){
         HttpSession session = request.getSession(false);
         if (session == null) {
-            return "homeV3";
+            return "home";
         }
         // memberId, nickname session에서 꺼내기
         Object memberId = session.getAttribute("memberId");
@@ -23,7 +23,7 @@ public class HomeController {
         //세션이 유지되면 로그인으로 이동
         model.addAttribute("memberId",memberId);
         model.addAttribute("helloNickname",nickname + " 님 안녕하세요");
-        return "homeV3";
+        return "home";
 
     }
 }
