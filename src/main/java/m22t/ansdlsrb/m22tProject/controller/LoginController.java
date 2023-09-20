@@ -24,6 +24,7 @@ public class LoginController {
 
     @PostMapping("/login")
     public String login(@Validated @ModelAttribute LoginInputDto loginInputDto, BindingResult result,
+                        // RequestParam 일단 사용 안함
                         @RequestParam(defaultValue = "/") String redirectURL,
                         HttpServletRequest request){
 
@@ -52,7 +53,13 @@ public class LoginController {
         session.setAttribute("memberId",loginMember.getMemberId());
         session.setAttribute("nickname",loginMember.getNickname());
 
-        return "redirect:" + redirectURL;
+        /**
+         * 로그인을 안한상태로 mypage를 누르면 /mypage/null로 get요청이 가고
+         * "redirect:" + redirectURL -> /login?redirectURL=/members/null -> 오류발생
+         *
+         */
+        // return "redirect:" + redirectURL;
+        return "redirect:/";
 
     }
 
