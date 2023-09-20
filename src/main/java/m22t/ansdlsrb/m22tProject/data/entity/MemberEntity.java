@@ -11,7 +11,7 @@ import lombok.Setter;
 public class MemberEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long memberId;
     @Column(unique = true)
     private String memberEmail;
     private String password;

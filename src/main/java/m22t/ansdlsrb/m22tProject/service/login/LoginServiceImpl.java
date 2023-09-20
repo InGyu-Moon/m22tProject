@@ -28,6 +28,7 @@ public class LoginServiceImpl implements LoginService {
         }
 
         MemberDto memberDto = new MemberDto();
+        memberDto.setMemberId(memberEntity.getMemberId());
         memberDto.setMemberEmail(memberEntity.getMemberEmail());
         memberDto.setPassword(memberEntity.getPassword());
         memberDto.setNickname(memberEntity.getNickname());

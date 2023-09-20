@@ -10,10 +10,7 @@ import m22t.ansdlsrb.m22tProject.service.login.LoginService;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -26,12 +23,15 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public String login(@Validated @ModelAttribute LoginInputDto loginInputDto, BindingResult result, HttpServletRequest request){
+    public String login(@Validated @ModelAttribute LoginInputDto loginInputDto, BindingResult result,
+                        @RequestParam(defaultValue = "/") String redirectURL,
+                        HttpServletRequest request){
 
         if(result.hasErrors()){
             return "login/loginFormV2";
         }
 
+        //로그인 확인
         MemberDto loginMember = loginService.login(loginInputDto.getMemberEmail(), loginInputDto.getPassword());
 
         //로그인 실패
@@ -47,14 +47,16 @@ public class LoginController {
         // default : true -> 세션이 있으면 있는 세션 반환, 없으면 신규 세션 생성
         // false -> 세션이 없으면 null 반환
         HttpSession session = request.getSession(true);
-        session.setAttribute("memberEmail",loginMember.getMemberEmail());
+
+        // session에 memberId, nickname 추가
+        session.setAttribute("memberId",loginMember.getMemberId());
         session.setAttribute("nickname",loginMember.getNickname());
 
-        return "redirect:/";
+        return "redirect:" + redirectURL;
 
     }
 
-    @PostMapping("logout")
+    @GetMapping("logout")
     public String logout(HttpServletRequest request){
         HttpSession session = request.getSession(false);
         if(session != null){
