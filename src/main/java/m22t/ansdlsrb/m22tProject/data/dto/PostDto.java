@@ -10,7 +10,7 @@ public class PostDto {
     private Long postId;
     @NotBlank(message = "제목은 필수 입력값입니다.")
     private String title;
-    @Min(value = 1, message = "가격은 1 이상이어야 합니다.")
+    @Min(value = 0, message = "가격은 0 이상이어야 합니다.")
     private int cost;
     @NotBlank(message = "내용은 필수 입력값입니다.")
     private String content;
