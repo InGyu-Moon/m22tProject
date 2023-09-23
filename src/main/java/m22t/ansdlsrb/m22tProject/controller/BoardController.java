@@ -21,10 +21,18 @@ import java.util.List;
 public class BoardController {
     private final PostService postService;
     @GetMapping
-    public String board(Model model){
+    public String board(Model model,HttpServletRequest request){
         //postList 만들어서 addAttribute
         List<PostDto> postDtoList = postService.findAllPost();
         model.addAttribute("postDtoList",postDtoList);
+
+        HttpSession session = request.getSession(false);
+        if(session == null){
+            return "redirect:/";
+        }
+        Object sessionNickname = session.getAttribute("nickname");
+        model.addAttribute("sessionNickname",(String)sessionNickname);
+
         return "/board/board";
     }
 

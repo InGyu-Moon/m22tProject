@@ -52,19 +52,30 @@
                 <a th:href="'/board/' + ${post.postId}" class="w-100 btn btn-lg btn-outline-primary">상세</a>
               </div>
               <div class="col">
-                <a href="" class="w-100 btn btn-lg btn-outline-primary" onclick="showAlert()">신청</a>
-              </div>
+                <a href="" class="w-100 btn btn-lg btn-outline-primary"
+                   onclick="checkAndShowAlert(this.getAttribute('data-post-nickname'),this.getAttribute('data-session-nickname'))"
+                   th:attr="data-post-nickname=${post.nickname}, data-session-nickname=${sessionNickname}">신청</a> </div>
             </div>
             <!-- <button type="button" class="w-100 btn btn-lg btn-outline-primary">신청하기</button> -->
-
           </div>
         </div>
       </div>
     </div>
+
+
+
     <script>
-    function showAlert() {
-        alert("신청되었습니다!"); // 원하는 알림 메시지를 여기에 추가하세요.
+
+    function checkAndShowAlert(postNickname, sessionNickname) {
+    console.log(postNickname);
+    console.log(sessionNickname);
+
+    if (postNickname === sessionNickname) {
+        alert("자신의 글에는 신청할 수 없습니다.");
+    } else {
+        alert("신청되었습니다!");
     }
+}
 </script>
 <!--
     <div class="col">
