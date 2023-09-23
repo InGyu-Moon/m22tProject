@@ -33,7 +33,7 @@ public class BoardController {
         Object sessionNickname = session.getAttribute("nickname");
         model.addAttribute("sessionNickname",(String)sessionNickname);
 
-        return "/board/board";
+        return "board/board";
     }
 
     @GetMapping("/new")
@@ -84,14 +84,14 @@ public class BoardController {
         }
 
 
-        return "/board/post";
+        return "board/post";
     }
     @GetMapping("/edit/{postId}")
     public String upadatePostForm(@PathVariable Long postId, Model model ){
         PostDto postDto = postService.findPostById(postId);
         model.addAttribute("postDto",postDto);
 
-        return "/board/editPostForm";
+        return "board/editPostForm";
     }
 
     @PostMapping("/edit/{postId}")
