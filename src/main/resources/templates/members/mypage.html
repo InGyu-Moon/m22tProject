@@ -17,7 +17,7 @@
     <p>Email: <span th:text="${member.memberEmail}"></span></p>
     <p>사용자명: <span th:text="${member.nickname}"></span></p>
     <a th:href="'/board/' + ${member.memberEmail}" class="btn btn-lg btn-outline-primary mx-auto" style="width: 150px;">예약목록</a>
-    <a th:href="@{'/reserve-check/' + ${session.memberId}} class="btn btn-lg btn-outline-primary mx-auto" style="width: 150px;">신청목록</a>
+    <a th:href="@{'/reserve-check/' + ${session.memberId}}" class="btn btn-lg btn-outline-primary mx-auto" style="width: 150px;">신청목록</a>
 
 </div>
 
