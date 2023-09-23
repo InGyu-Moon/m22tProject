@@ -3,6 +3,7 @@ package m22t.ansdlsrb.m22tProject.data.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.stereotype.Controller;
 
 import java.time.LocalDateTime;
 
@@ -16,7 +17,8 @@ public class ReserveEntity {
     private Long id;
 
     private String user_name; // 예약자 이름
-    private String user_nickname;//예약자 닉네임
+    @Column(name="user_nickname")
+    private String nickname;//예약자 닉네임
     private String user_phone_number; // 예약자의 전화번호
     private Long place_id;  // 예약 장소의 고유키 (id)
 
@@ -43,7 +45,7 @@ public class ReserveEntity {
     public ReserveEntity(Long id, String user_name, String user_nickname, String user_phone_number, Long place_id, LocalDateTime start_time, LocalDateTime end_time, Integer num_of_people,PlaceEntity placeEntity) {
         this.id = id;
         this.user_name = user_name;
-        this.user_nickname=user_nickname;
+        this.nickname=user_nickname;
         this.user_phone_number = user_phone_number;
         this.place_id = place_id;
         this.start_time=start_time;

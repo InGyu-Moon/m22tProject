@@ -1,11 +1,14 @@
 package m22t.ansdlsrb.m22tProject.service.reserve;
 
 import m22t.ansdlsrb.m22tProject.data.dto.PlaceDisplayDto;
+import m22t.ansdlsrb.m22tProject.data.dto.PostDto;
 import m22t.ansdlsrb.m22tProject.data.dto.ReserveDto;
 import m22t.ansdlsrb.m22tProject.data.entity.PlaceEntity;
+import m22t.ansdlsrb.m22tProject.data.entity.PostEntity;
 import m22t.ansdlsrb.m22tProject.data.entity.ReserveEntity;
 import m22t.ansdlsrb.m22tProject.data.repository.PlaceRepository;
 import m22t.ansdlsrb.m22tProject.data.repository.ReserveRepository;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -117,9 +120,22 @@ public class ReserveServiceImpl implements ReserveService {
         return matchingUsers;
     }
 
-    private boolean isMatching(ReserveEntity entity,String nickname) {
-        return entity.getUser_nickname().equals(nickname);
+    @Override
+    public List<ReserveDto> getReserveByNickname(String nickname) {
+        List<ReserveEntity> reserveEntityList = reserveRepository.findByNickname(nickname);
+        List<ReserveDto> reserveDtoList = new ArrayList<>();
 
+        for(ReserveEntity reserveEntity : reserveEntityList){
+            ReserveDto reserveDto = new ReserveDto();
+            BeanUtils.copyProperties(reserveEntity, reserveDto);
+            reserveDtoList.add(reserveDto);
+        }
+
+        return reserveDtoList;
+    }
+
+    private boolean isMatching(ReserveEntity entity, String nickname) {
+        return entity.getNickname().equals(nickname);
     }
 
 }

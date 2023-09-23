@@ -17,4 +17,6 @@ public interface ReserveService {
 
     public List<ReserveEntity> findMatchingUsers(String nickname);
 
+    public List<ReserveDto> getReserveByNickname(String nickname);
+
 }

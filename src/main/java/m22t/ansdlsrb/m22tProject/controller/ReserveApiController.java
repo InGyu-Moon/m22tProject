@@ -32,7 +32,7 @@ public class ReserveApiController {
                 // DTO 객체로부터 예약 정보를 추출하여 DB에 저장
                 ReserveEntity user = new ReserveEntity();
                 user.setUser_name(reserveDto.getUser_name());
-                user.setUser_nickname(reserveDto.getUser_nickname());
+                user.setNickname(reserveDto.getUser_nickname());
                 user.setUser_phone_number(reserveDto.getUser_phone_number());
                 user.setPlace_id(reserveDto.getPlace_id());
                 user.setStart_time(reserveDto.getStart_time());
