@@ -15,7 +15,13 @@
     <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
       <li><a href="/board" class="nav-link px-2">Board</a></li>
       <li><a th:href="@{'/members/' + ${session.memberId}}" class="nav-link px-2">Mypage</a></li>
+      <li><a th:href="@{'/reserve/' + ${session.memberId}}" class="nav-link px-2">예약 하기</a></li>
+      <li><a th:href="@{'/reserve-check/' + ${session.memberId}}" class="nav-link px-2">조회 하기</a></li>
+
+
     </ul>
+
+
 
     <div class="col-md-3 text-end">
       <a href="/members/new" class="btn btn-outline-primary me-2">Sign-up</a>

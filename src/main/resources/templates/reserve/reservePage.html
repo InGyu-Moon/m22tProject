@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>예약 페이지</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/roundSlider/1.3.2/roundslider.min.js"></script>
+
+    <style>
+        .form-group-time {
+            display: flex;
+            flex-direction: column;
+            align-items: left;
+            margin-bottom: 10px;
+        }
+
+        .form-group-time label {
+            flex: 1;
+            margin-right: 10px;
+            text-align: left;
+        }
+
+        .form-group-time input[type="datetime-local"] {
+            flex: 2;
+        }
+
+         #num_of_people {
+        width: 50%; /* 원하는 가로 폭으로 조절, 예: 50% */
+        }
+    </style>
+</head>
+<body>
+
+<div th:replace="~{fragment/fragment :: header}"></div>
+
+<div class="container">
+    <div class="text-center">
+        <h3>예약 하기</h3>
+    </div>
+    <br>
+
+    <form id="reserveForm">
+        <div class="form-group">
+            <label for="user_nickname">예약자 닉네임:</label>
+            <h1 class="fw-bolder mb=1" th:text="${memberNickname}"></h1>
+            <input type="hidden" class="form-control" id="user_nickname" name="user_nickname" th:value="${memberNickname}">
+        </div>
+        <div class="form-group">
+            <label for="user_name">예약자 이름:</label>
+            <input type="text" class="form-control" id="user_name" name="user_name" required>
+        </div>
+
+        <div class="form-group">
+            <label for="user_phone_number">예약자 전화번호:</label>
+            <input type="text" class="form-control" id="user_phone_number" name="user_phone_number" pattern="\d{3}-\d{4}-\d{4}" required>
+            <small class="form-text text-muted">전화번호는 010-xxxx-xxxx 형식이어야 합니다.</small>
+        </div>
+
+        <div class="form-group">
+            <input type="hidden" class="form-control" id="place_id" name="place_id" required>
+        </div>
+
+        <div>
+            <label for="placeSelect">예약 장소</label>
+            <select id="placeSelect">
+                <option value="">Select a place</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="num_of_people">인원 수:</label>
+            <span id="num_of_people_value">1</span>
+            <input type="range" class="form-control" id="num_of_people" name="num_of_people"
+                    min="1" max="20" required>범위 : 1명 ~ 20명
+        </div>
+
+
+
+        <div class="form-group-time">
+            <label for="start_time">입실 날짜 및 시간:</label>
+            <input type="datetime-local" class="form-control" id="start_time" name="start_time" required>
+        </div>
+
+        <div class="form-group-time">
+            <label for="end_time">퇴실 날짜 및 시간:</label>
+            <input type="datetime-local" class="form-control" id="end_time" name="end_time" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">예약하기</button>
+    </form>
+
+    <p id="resultMessage"></p>
+
+
+</div>
+<div th:replace="~{fragment/fragment :: footer}"></div>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script>
+
+// ----------- 백엔드로 부터 장소 데이터를 가져오는 과정
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+    const apiUrl = '/find-places';
+    const selectElement = document.getElementById('placeSelect');
+
+    fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+            // <select> 요소에 데이터 추가
+            data.forEach(placeDto => {
+                const option = document.createElement('option');
+                option.value = placeDto.id;
+                option.textContent = `${placeDto.name} --- ${placeDto.roadAddress}`;
+                selectElement.appendChild(option);
+            });
+        })
+        .catch(error => console.error('Failed to fetch data from the API:', error));
+});
+
+
+
+// ----------- 아래는 장소를 드롭다운으로 select 하면 자동으로 예약장소 id가 채워지도록
+
+document.addEventListener('DOMContentLoaded', () => {
+    const selectElement = document.getElementById('placeSelect');
+    const placeIdInput = document.getElementById('place_id');
+
+    selectElement.addEventListener('change', () => {
+        const selectedOption = selectElement.options[selectElement.selectedIndex];
+        const selectedPlaceId = selectedOption.value;
+
+        // Update the input field with the selected place ID
+        placeIdInput.value = selectedPlaceId;
+    });
+});
+
+
+    //----------- 아래는 range 구현
+
+    const rangeInput = document.getElementById('num_of_people');
+    const valueDisplay = document.getElementById('num_of_people_value');
+
+    rangeInput.addEventListener('input', (event) => {
+        const value = event.target.value;
+        valueDisplay.textContent = value;
+    });
+
+
+    window.addEventListener('load', () => {
+        // 페이지가 처음 로드될 때 1로 초기화
+        rangeInput.value = 1;
+        valueDisplay.value=1;
+        valueDisplay.textContent = rangeInput.value;
+    });
+
+
+      window.addEventListener('beforeunload', () => {
+        rangeInput.value = 1;
+        valueDisplay.value=1;
+    });
+
+
+
+
+    //---------- 아래는 오늘 이전 불가 구현
+
+
+
+    var now_utc = Date.now();
+     var timeOff = new Date().getTimezoneOffset() * 60000;
+
+     var currentDate = new Date(now_utc - timeOff);
+
+     var tomorrowDate = new Date(currentDate.getTime() + 86400000);
+     var tomorrowFormatted = tomorrowDate.toISOString().slice(0, 16);
+
+     document.getElementById("start_time").setAttribute("min", tomorrowFormatted);
+     document.getElementById("end_time").setAttribute("min", tomorrowFormatted);
+
+
+
+
+     // ---- 아래는 예약 페이지 관련 js 코드 //
+
+
+
+
+     document.addEventListener('DOMContentLoaded', function() {
+
+
+     document.getElementById('reserveForm').addEventListener('submit', function(event) {
+     event.preventDefault(); // 기본 폼 제출 동작을 막습니다. (예약 과정)
+
+
+
+
+     const formData = new FormData(event.target);
+     const jsonData = JSON.stringify({
+         user_name: formData.get("user_name"),
+         user_nickname: formData.get("user_nickname"),
+         user_phone_number: formData.get("user_phone_number"),
+         place_id: parseInt(formData.get("place_id")),
+         start_time: formData.get("start_time"),
+         end_time: formData.get("end_time"),
+         num_of_people:formData.get("num_of_people"),
+         placeEntity: {
+         id: parseInt(formData.get("place_id"))} // 여기 존재하는 외래키에 id 값 저장
+     });
+
+     const confirmation = confirm('예약을 하시겠습니까?');
+
+     if(confirmation){
+
+     fetch("/input-reserve", {
+         method: "POST",
+         body: jsonData,
+         headers: {
+             'Content-Type': 'application/json'
+         }
+     })
+     .then(response => response.json())
+     .then(data => {
+         const resultMessage = document.getElementById('resultMessage');
+          const user_name_input = document.getElementById('user_name');
+          const user_nickname_input = document.getElementById('user_nickname');
+         const user_phone_input = document.getElementById('user_phone_number');
+         const start_time_input = document.getElementById('start_time');
+         const end_time_input = document.getElementById('end_time');
+         const num_of_people_input = document.getElementById('num_of_people');
+
+
+
+         const placeIdInput = document.getElementById('place_id');
+         const placeCodeInput = document.getElementById('place_id');
+         placeIdInput.addEventListener("input", () => {
+
+         placeEntityInput.value = placeIdInput.value;
+
+
+
+     });
+
+         if (data.success) {
+
+             //resultMessage.textContent = '예약 완료';
+             alert('예약을 성공하였습니다.');
+
+             user_name_input.value = '';
+             user_phone_input.value = '';
+             placeIdInput.value = '';
+             start_time_input.value = '';
+             end_time_input.value='';
+             num_of_people_input.value=1;
+
+
+         } else {
+             // resultMessage.textContent = '중복된 예약 정보가 있습니다.';
+             alert('예약 실패 중복된 정보이거나, 시간 선택이 올바르지 않습니다.');
+         }
+     })
+     .catch(error => {
+         console.error('에러 발생:', error);
+     });
+
+     }
+
+     });
+
+
+      function getFormattedMinDate() {
+     const now = new Date();
+     const minDate = new Date(now);
+     minDate.setDate(minDate.getDate() + 1); // 오늘 이후의 날짜로 설정
+
+     const year = minDate.getFullYear();
+     const month = String(minDate.getMonth() + 1).padStart(2, '0');
+     const day = String(minDate.getDate()).padStart(2, '0');
+
+     return `${year}-${month}-${day}`;
+     }
+
+     });
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>예약 페이지</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/roundSlider/1.3.2/roundslider.min.js"></script>
+
+    <style>
+        .form-group-time {
+            display: flex;
+            flex-direction: column;
+            align-items: left;
+            margin-bottom: 10px;
+        }
+
+        .form-group-time label {
+            flex: 1;
+            margin-right: 10px;
+            text-align: left;
+        }
+
+        .form-group-time input[type="datetime-local"] {
+            flex: 2;
+        }
+
+         #num_of_people {
+        width: 50%; /* 원하는 가로 폭으로 조절, 예: 50% */
+        }
+    </style>
+</head>
+<body>
+
+<div th:replace="~{fragment/fragment :: header}"></div>
+
+<div class="container">
+    <div class="text-center">
+        <h3>내 예약</h3>
+    </div>
+    <br>
+
+    <form id="reserveForm">
+        <div class="form-group">
+            <label for="user_nickname">예약자 닉네임:</label>
+            <h1 class="fw-bolder mb=1" th:text="${memberNickname}"></h1>
+            <input type="hidden" class="form-control" id="user_nickname" name="user_nickname" th:value="${memberNickname}">
+        </div>
+    </form>
+
+
+    <div id="reservationList"></div>
+
+
+</div>
+<div th:replace="~{fragment/fragment :: footer}"></div>
+
+<script>
+
+    document.addEventListener('DOMContentLoaded', function () {
+        loadReservations();
+    });
+
+   function loadReservations(memberNickname) {
+
+        fetch(`/check-reserve/${memberNickname}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json(); // JSON으로 파싱
+            })
+            .then(data => {
+                displayReservations(data);
+            })
+            .catch(error => {
+                console.error("Error fetching reservations:", error);
+            });
+    }
+
+    function displayReservations(reservations) {
+        const reservationListDiv = document.getElementById('reservationList');
+        reservationListDiv.innerHTML = ''; // 이전 내용 초기화
+
+        if (reservations && reservations.length > 0) {
+            const ul = document.createElement('ul');
+            reservations.forEach(reservation => {
+                const li = document.createElement('li');
+                li.textContent = `Reservation ID: ${reservation.id}, Date: ${reservation.date}`;
+                ul.appendChild(li);
+            });
+            reservationListDiv.appendChild(ul);
+        } else {
+            reservationListDiv.textContent = '예약이 없습니다.';
+        }
+    }
+</script>
+</body>
+

@@ -12,7 +12,7 @@ import java.io.IOException;
 public class LoginCheckFilter implements Filter {
 
     //접근 가능한 주소 설정
-    private static final String[] whitelist = {"/", "/members/new", "/login", "/logout"};
+    private static final String[] whitelist = {"/", "/members/new", "/login", "/logout"}; // 예약 페이지 임시 추가
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {

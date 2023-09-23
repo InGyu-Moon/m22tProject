@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "m22t_test")
+@Table(name = "m22t")
 @Getter
 @Setter
 public class PlaceEntity {

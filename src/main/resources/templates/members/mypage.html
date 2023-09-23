@@ -16,10 +16,15 @@
     <h1>Welcome to My Page</h1>
     <p>Email: <span th:text="${member.memberEmail}"></span></p>
     <p>nickname: <span th:text="${member.nickname}"></span></p>
+    <a th:href="@{'/reserve-check/' + ${session.memberId}}" class="btn btn-primary">내 예약 목록 조회</a>
+
 </div>
 
-
+<div id="reservationContainer"></div>
 <!-- footer -->
 <div th:replace="~{fragment/fragment :: footer}"></div>
 </body>
+
+
+
 </html>
